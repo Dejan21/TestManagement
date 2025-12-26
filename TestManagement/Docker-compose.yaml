@@ -1,0 +1,42 @@
+version: "3.9"
+
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: taskmanagement-db
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "TaskUser!123"
+      MSSQL_PID: "Developer"
+    ports:
+      - "1434:1433"       
+    volumes:
+      - sql_data:/var/opt/mssql
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: taskmanagement-api
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ConnectionStrings__Default: "Server=db,1433;Database=TaskManagementDb;User Id=sa;Password=TaskUser!123;TrustServerCertificate=True;"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ../../Frontend/task-management-ui
+    container_name: taskmanagement-ui
+    environment:
+      
+      VITE_API_URL: "http://localhost:8080"
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+volumes:
+  sql_data:
