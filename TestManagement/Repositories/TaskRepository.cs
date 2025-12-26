@@ -99,7 +99,7 @@ namespace TaskManagement.Repositories
             SET IsCompleted = @Value,
                 UpdatedAt = SYSUTCDATETIME()
             WHERE Id = @Id
-        """;
+            """;
 
             using var conn = CreateConnection();
             var rows = await conn.ExecuteAsync(sql, new { Id = id, Value = value });
