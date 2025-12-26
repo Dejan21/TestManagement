@@ -32,7 +32,7 @@ services:
     container_name: taskmanagement-ui
     environment:
       
-      VITE_API_URL: "http://localhost:8080"
+      VITE_API_BASE_URL: "http://localhost:8080"
     ports:
       - "5173:5173"
     depends_on:
